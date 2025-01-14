@@ -24,7 +24,10 @@ def move_file(file_path, target_dir):
     """Перемещает файл в указанную директорию."""
     if not os.path.exists(target_dir):
         os.makedirs(target_dir)
-    shutil.move(file_path, os.path.join(target_dir, os.path.basename(file_path)))
+    target_path = os.path.join(target_dir, os.path.basename(file_path))
+    
+    logging.info(f"Перемещение файла {file_path} в {target_path}")
+    shutil.move(file_path, target_path)
 
 def handle_request(file_path, output_dir, output_invalid, output_corrupted, fb, cl, m, f, t):
     """Обрабатывает запрос на перевод JAR-файла."""
