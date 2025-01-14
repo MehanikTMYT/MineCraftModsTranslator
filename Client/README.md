@@ -1,65 +1,72 @@
-### JAR File Translator
+### JAR Переводчик
 
-Это клиентское приложение позволяет обрабатывать JAR-файлы, осуществляя перевод содержимого с одного языка на другой с использованием различных переводчиков посредством модуля jsontt (thanks to https://github.com/mololab/json-translator)
+[Русская версия](https://github.com/MehanikTMYT/MineCraftModsTranslator/tree/main/Client/README-ru.md)
 
-## Установка
+This client application allows you to process JAR files by translating the content from one language to another using various translators via the jsontt module
 
-Для работы приложения необходимо наличие Python (версия 3.x). Также требуется установить библиотеку `requests`, если она еще не установлена:
+[Thanks to](https://github.com/mololab/json-translator)
+
+## Installation
+
+Python (version 3.x) is required for the application to work. It also requires the `requests` library to be installed if it is not already installed:
 
 ```bash
 pip install requests
 ```
-## Использование
-# Запуск приложения
+## Usage
+## Start the application
 
-Приложение можно запустить из командной строки. Или используя VScode или любой другой редактор поддерживающий работу с окружением Python
-Перейдите в директорию с JAR-файлами и выполните следующую команду:
+The application can be run from the command line. Or by using VScode or any other editor that supports the Python environment
+Go to the directory with the JAR files and run the following command:
 
 ```bash
 python translator.py [options]
 ```
 
-# Аргументы [options] (не обязательны)
+# Arguments [options] (optional)
 
-* --fb (default: yes): Использовать резервный переводчик. Возможные значения: yes, no.
-* --cl (default: 3): Максимальное число запросов, которые будут отправлены к серверу.
-* --m (default: bing): Выбор переводчика. Возможные значения: google, google2, bing.
-* --f (default: en): Исходный язык. Доступные коды языков можно увидеть ниже.
-* --t (default: ru): Целевой язык. Доступные коды языков можно увидеть ниже.
-* --output_dir (default: 1): Папка для хранения успешно переведенных JAR-файлов.
-* --output_invalid (default: 2): Папка для хранения неподходящих JAR-файлов, которые не содержат необходимые директории.
-* --output_corrupted (default: 3): Папка для хранения поврежденных JAR-файлов.
+* --fb (default: yes): Use the standby translator. Possible values: yes, no.
+* --cl (default: 3): Maximum number of requests to be sent to the server.
+* --m (default: bing): Select a translator. Possible values: google, google2, bing.
+* --f (default: en): Source language. Available language codes can be seen below.
+* --t (default: ru): Target language. Available language codes can be seen below.
+* --output_dir (default: 1): A folder to store successfully translated JAR files.
+* --output_invalid (default: 2): A folder to store inappropriate JAR files that do not contain the required directories.
+* --output_corrupted (default: 3): A folder to store corrupted JAR files.
 
-# Поддерживаемые языки
+# Supported languages
 
-Следующие языковые коды поддерживаются в приложении:
+The following language codes are supported in the application:
 
-af, sq, am, ar, hy, az, eu, be, bn, bs, bg, ca, ceb, ny,
+af, sq, am, ar, ar, hy, az, eu, be, bn, bs, bg, ca, ceb, ny,
 zh-CN, zh-TW, co, hr, cs, da, nl, en, eo, et, tl, fi, fr,
 fy, gl, ka, de, el, gu, ht, ha, haw, iw, hi, hmn, hu,
 is, ig, id, ga, it, ja, jw, kn, kk, km, ko, ku, ky, lo,
 la, lv, lt, lb, mk, mg, ms, ml, mt, mi, mr, mn, my, ne,
-no, ps, fa, pl, pt, pa, ro, ru, sm, gd, sr, st, sn, sd,
+no, ps, fa, pl, pt, pa, ro, ro, ru, sm, gd, sr, st, sn, sd,
 si, sk, sl, so, es, su, sw, sv, tg, ta, te, th, tr, uk,
 ur, uz, vi, cy, xh, yi, yo, zu
 
-# Пример использования со всеми параметрами 
+[original list](https://github.com/mololab/json-translator/blob/master/docs/LANGUAGES.md)
+
+# Example usage with all parameters 
 
 ```bash
 python translator.py --fb yes --cl 3 --m bing --f en --t ru --output_dir translated --output_invalid invalid --output_corrupted corrupted
 ```
-# Обработка ошибок
+# Error handling
 
-При обработке JAR-файлов возможны следующие сценарии:
+The following scenarios are possible when processing JAR files:
 
-Успешная обработка: Файл будет сохранен в директории, указанной с помощью аргумента --output_dir.
-Недопустимые файлы: Если файл не содержит необходимых папок, он будет перемещен в директорию --output_invalid.
-Поврежденные файлы: Если файл поврежден, он будет перемещен в директорию --output_corrupted.
+Successful processing: The file will be saved in the directory specified with the --output_dir argument.
+Invalid files: If the file does not contain the required folders, it will be moved to the --output_invalid directory.
+Corrupted files: If a file is corrupted, it will be moved to the --output_corrupted directory.
 
-# Логирование
+# Logging
 
-Все события и ошибки записываются в лог с использованием модуля logging. Логи выводятся в консоль.
+All events and errors are logged using the logging module. Logs are output to the console.
 
-### Заключение
-Это приложение предоставляет простой способ перевода JAR-файлов и обработки их ошибок. 
-В случае проблем с использованием, пожалуйста, проверьте, правильно ли указаны аргументы командной строки, и убедитесь, что все зависимые библиотеки установлены.
+### Conclusion
+
+This application provides a simple way to translate JAR files and handle their errors. 
+In case of usage problems, please check if the command line arguments are correct and make sure all dependent libraries are installed.

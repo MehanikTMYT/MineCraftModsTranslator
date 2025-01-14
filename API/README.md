@@ -1,59 +1,60 @@
 ### JAR File Translator
+[Русская версия](https://github.com/MehanikTMYT/MineCraftModsTranslator/tree/main/API/README-ru.md)
 
-Это серверное API-приложение позволяет обрабатывать JAR-файлы, осуществляя перевод содержимого с одного языка на другой с использованием различных переводчиков посредством модуля jsontt (thanks to https://github.com/mololab/json-translator)
+This server-side API application allows you to process JAR files by translating the content from one language to another using various translators via the jsontt module
+[Thanks to this repo](https://github.com/mololab/json-translator)
 
-## Установка
+## Installation
 
-Для работы приложения необходимо наличие node.js (на момент создания актуальная версия - v22.9.0). Для проверки наличия можно воспользоваться командой:
+The application requires node.js (at the time of creation, the current version is v22.9.0). To check if it is available, you can use the command:
 
 ```bash
 node --version
 ```
-Для инициализации API требуется выполнить следующую команду для установки требуемых зависимостей в папку:
+To initialize the API, the following command is required to install the required dependencies in the folder:
 
 ```bash
 npm i
 ```
-## Запуск
+## Startup
 
-Для запуска можно воспользоваться следующей командой:
+You can use the following command to start up:
 
 ```bash
 node app.js
 ```
 
-## Структура API
+## API Structure
 
-API приложения состоит из следующих файлов:
+The application API consists of the following files:
 
-* app.js - основной файл для инициализации сервера.
-* controllers.js - контроллеры, которые обрабатывают запросы.
-* fileProcessor.js - логика обработки JAR-файлов.
-* routes.js - маршрутизация API.
-* utils.js - утилитарные функции, такие как валидация параметров и обработка файлов.
+* app.js - the main file for server initialization.
+* controllers.js - controllers that process requests.
+* fileProcessor.js - logic of JAR-files processing.
+* routes.js - API routing.
+* utils.js - utility functions such as parameter validation and file processing.
 
+## Main components
 
-## Основные компоненты
+## app.js.
 
-# app.js
-
-Этот файл настраивает сервер Express и задает основные маршруты.
+This file configures the Express server and sets up the basic routes.
 
 # controllers.js
 
-Содержит функции контроллеров для обработки JAR-файлов и настройки загрузки.
+Contains controller functions for processing JAR files and customizing downloads.
 
 # fileProcessor.js
 
-Обрабатывает распаковку и перевод контента JAR-файла.
+Handles decompression and translation of JAR file content.
 
-# routes.js
+# routes.js.
 
-Маршруты для обработки API-запросов.
+Routes for processing API requests.
 
 # utils.js
 
-Содержит утилитарные функции, включая валидацию параметров и обработку файлов.
+Contains utility functions including parameter validation and file processing.
 
-## Разработчики
-Разработчики API: [MehanikTM_YT]
+## Developers
+API Developers: [MehanikTM_YT](https://github.com/MehanikTMYT)
