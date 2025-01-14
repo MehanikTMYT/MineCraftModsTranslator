@@ -4,6 +4,7 @@ import os
 import json
 import shutil
 import logging
+import time
 
 # Поддерживаемые языковые коды
 supported_languages = [
@@ -49,9 +50,23 @@ def handle_request(file_path, output_dir, output_invalid, output_corrupted, fb, 
 
             output_file_name = f"{os.path.splitext(os.path.basename(file_path))[0]}.jar"
             output_file_path = os.path.join(output_dir, output_file_name)
+
             with open(output_file_path, 'wb') as output_file:
                 output_file.write(response.content)
             logging.info(f"Файл успешно обработан и сохранен как: {output_file_path}")
+
+        # Попробуем удалить оригинальный файл, если это возможно
+        try:
+            os.remove(file_path)
+            logging.info(f"Оригинальный файл {file_path} был успешно удален.")
+        except PermissionError as e:
+            logging.error(f"Ошибка доступа к файлу {file_path}: {e}. Попробуем удалить позже.")
+            time.sleep(1)  # Задержка перед повторной попыткой удаления
+            try:
+                os.remove(file_path)
+                logging.info(f"Оригинальный файл {file_path} был успешно удален после ожидания.")
+            except Exception as e:
+                logging.error(f"Не удалось удалить оригинальный файл {file_path} даже после ожидания: {e}")
 
     except requests.exceptions.RequestException as e:
         handle_error(e, file_path, output_invalid, output_corrupted)
@@ -108,4 +123,5 @@ if __name__ == "__main__":
     else:
         for jar_file in jar_files:
             logging.info(f"Обработка файла: {jar_file}")
-            process_jar(jar_file, args.output_dir, args.output_invalid, args.output_corrupted, fb=args.fb, cl=args.cl, m=args.m, f=args.f, t=args.t)
+            process_jar(jar_file, args.output_dir, args.output_invalid, args.output_corrupted, 
+                        fb=args.fb, cl=args.cl, m=args.m, f=args.f, t=args.t)
