@@ -1,0 +1,1 @@
+Parser info from pack file of mod
