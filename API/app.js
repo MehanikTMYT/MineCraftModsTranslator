@@ -1,7 +1,5 @@
 //app.js
-const express = require('express');
-const routes = require('./routes');
-const { upload } = require('./controllers');
+const {express, router, upload } = require('./utils');
 
 const app = express();
 const PORT = process.env.PORT || 8150;
@@ -10,7 +8,7 @@ const PORT = process.env.PORT || 8150;
 app.use(express.json());
 
 // Маршруты обработки JAR-файлов
-app.use('/process', upload.single('jarFile'), routes);
+app.use('/process', upload.single('jarFile'), router);
 
 // Запуск сервера
 app.listen(PORT, () => {

@@ -1,7 +1,7 @@
 {
   "name": "minecraft-mods-translator",
-  "version": "2.0.0",
-  "description": "An AI translator for Minecraft mods.",
+  "version": "1.0.0",
+  "description": "A translator for Minecraft mods.",
   "main": "app.js",
   "author": "MehanikTM_YT",
   "license": "MIT",
@@ -20,21 +20,20 @@
     "node": ">=20.0.0"
   },
   "dependencies": {
-    "@parvineyvazov/json-translator": "^3.0.0",
     "adm-zip": "^0.5.16",
     "body-parser": "^1.20.3",
-    "electron": "v34.0.2",
     "express": "^4.21.2",
-    "minecraft-mods-translator": "file:",
-    "multer": "^1.4.5-lts.1"
+    "multer": "^1.4.5-lts.1",
+    "electron": "v34.0.2",
+    "@parvineyvazov/json-translator": "^3.0.0"
   },
   "devDependencies": {
     "electron-builder": "^25.1.8"
   },
   "scripts": {
-    "start": "electron .",
-    "build": "electron-builder",
-    "package": "electron-builder --win --x64 --linux --x64"
+    "start": "electron .", 
+    "build": "electron-builder --win --x64 --portable", 
+    "package": "electron-builder --win --x64 --portable"
   },
   "build": {
     "appId": "com.mehtmyt.MineCraftModsTranslator",
@@ -55,7 +54,7 @@
           ]
         }
       ],
-      "icon": "build/icon.ico"
+      "icon": "build/icon.ico" 
     },
     "linux": {
       "target": [
@@ -66,12 +65,15 @@
           ]
         }
       ],
-      "icon": "build/icon.png"
+      "icon": "build/icon.png" 
     },
     "nsis": {
       "oneClick": true,
       "perMachine": true,
       "allowToChangeInstallationDirectory": true
+    },
+    "portable": {
+      "artifactName": "${productName}-portable-${version}.${ext}"
     }
   },
   "bugs": {
