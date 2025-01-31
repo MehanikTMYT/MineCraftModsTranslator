@@ -1,6 +1,6 @@
 // routes.mjs
 import express from 'express';
-import { processJarFile } from './controllers.js';
+import { processJarFile } from './controllers.mjs';
 
 const router = express.Router();
 
