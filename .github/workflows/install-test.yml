@@ -2,11 +2,9 @@ name: Install and Test on Testing Branch
 
 on:
   push:
-    branches:
-      - 'testing-+-updates'
+    branches: [testing-+-updates]
   pull_request:
-    branches:
-      - 'testing-+-updates'
+    branches: [testing-+-updates]
 
 jobs:
   build-linux:
@@ -32,8 +30,8 @@ jobs:
       - name: Rename AppImage file to binary (Linux)
         run: |
           cd dist
-          mv *.AppImage MineCraft_Mods_Translator  # Убираем расширение
-          chmod +x MineCraft_Mods_Translator  # Делаем файл исполняемым
+          mv *.AppImage MineCraft_Mods_Translator
+          chmod +x MineCraft_Mods_Translator
 
       - name: Archive artifacts for upload (Linux)
         uses: actions/upload-artifact@v3
