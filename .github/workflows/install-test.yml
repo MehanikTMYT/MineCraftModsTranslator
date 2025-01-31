@@ -17,6 +17,9 @@ jobs:
         with:
           node-version: '20'
           
+      - name: cd to dir
+        run: cd API
+        
       - name: Install dependencies
         run: npm i
         
@@ -45,6 +48,9 @@ jobs:
         with:
           node-version: '20'
           
+      - name: cd to dir
+        run: cd API
+        
       - name: Install dependencies
         run: npm i
         
