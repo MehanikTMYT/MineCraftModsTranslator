@@ -1,18 +1,114 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: [push]
+name: Install and Test on Testing Branch
+
+on:
+  push:
+    branches: [testing-+-updates]
+
 jobs:
-  Explore-GitHub-Actions:
+  build-linux:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: cd to dir
+        run: cd API
+        
+      - name: Install dependencies
+        run: npm i
+        
+      - name: Build the application with Electron for Linux
+        run: npm run package -- --linux --x64
+        
+      - name: Rename AppImage file to binary (Linux)
+        run: |
+          cd dist
+          mv *.AppImage MineCraft_Mods_Translator
+          
+      - name: Archive artifacts for upload (Linux)
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-build-linux
+          path: dist/MineCraft_Mods_Translator
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          
+      - name: cd to dir
+        run: cd API
+        
+      - name: Install dependencies
+        run: npm i
+        
+      - name: Build the application with Electron for Windows
+        run: npm run package -- --win --x64 --portable
+        
+      - name: Rename Portable Executable file (Windows)
+        run: |
+          cd dist
+          ren "MineCraft Mods Translator*.exe" "MineCraft_Mods_Translator_Portable.exe"
+          
+      - name: Archive artifacts for upload (Windows)
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-build-windows
+          path: dist/MineCraft_Mods_Translator_Portable.exe
+          
+  upload-release-assets:
+    needs: [build-linux, build-windows]
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
+      - name: Checkout code
         uses: actions/checkout@v4
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+        
+      - name: Download Linux build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: app-build-linux
+          path: dist/linux
+          
+      - name: Download Windows build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: app-build-windows
+          path: dist/windows
+          
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.event.release.tag_name }}
+          release_name: Release ${{ github.event.release.tag_name }}
+          draft: false
+          prerelease: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Upload Linux Binary to the release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist/linux/MineCraft_Mods_Translator
+          asset_name: MineCraft_Mods_Translator
+          asset_content_type: application/octet-stream
+          
+      - name: Upload Portable Executable to the release
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./dist/windows/MineCraft_Mods_Translator_Portable.exe
+          asset_name: MineCraft_Mods_Translator_Portable.exe
+          asset_content_type: application/octet-stream
