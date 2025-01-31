@@ -1,1 +1,0 @@
-Parser mod info from GitHub

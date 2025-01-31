@@ -1,8 +1,82 @@
 {
+  "name": "minecraft-mods-translator",
+  "version": "2.0.0",
+  "description": "An AI translator for Minecraft mods.",
+  "main": "app.mjs",
+  "author": "MehanikTM_YT",
+  "license": "MIT",
+  "homepage": "https://github.com/MehanikTMYT/MineCraftModsTranslator",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MehanikTMYT/MineCraftModsTranslator.git"
+  },
+  "keywords": [
+    "minecraft",
+    "translator",
+    "mods",
+    "electron"
+  ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "type": "module", 
   "dependencies": {
+    "@parvineyvazov/json-translator": "^3.0.0",
     "adm-zip": "^0.5.16",
     "body-parser": "^1.20.3",
+    "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "multer": "^1.4.5-lts.1"
+    "minecraft-mods-translator": "file:",
+    "multer": "^1.4.5-lts.1",
+    "openai": "^4.81.0"
+  },
+  "devDependencies": {
+    "electron-builder": "^25.1.8"
+  },
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "package": "electron-builder --win --x64 --linux --x64 --portable"
+  },
+  "build": {
+    "appId": "com.mehtmyt.MineCraftModsTranslator",
+    "productName": "MineCraft Mods Translator",
+    "copyright": "Copyright © 2025 MehanikTM_YT",
+    "files": [
+      "**/*"
+    ],
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.png"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "bugs": {
+    "url": "https://github.com/MehanikTMYT/MineCraftModsTranslator/issues"
   }
 }

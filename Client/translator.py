@@ -30,10 +30,9 @@ def move_file(file_path, target_dir):
     logging.info(f"Перемещение файла {file_path} в {target_path}")
     shutil.move(file_path, target_path)
 
-def handle_request(file_path, output_dir, output_invalid, output_corrupted, fb, cl, m, f, t):
+def handle_request(file_path, output_dir, output_invalid, output_corrupted, fb, cl, m, f, t, translate_method):
     """Обрабатывает запрос на перевод JAR-файла."""
     url = "http://mehhost.ru:8150/process"
-
     try:
         with open(file_path, 'rb') as jarFile:
             files = {'jarFile': jarFile}
@@ -43,18 +42,15 @@ def handle_request(file_path, output_dir, output_invalid, output_corrupted, fb, 
                 'm': m,
                 'f': f,
                 't': t,
+                'translateMethod': translate_method  # Добавляем параметр translateMethod
             }
-
             response = requests.post(url, files=files, data=data)
             response.raise_for_status()
-
             output_file_name = f"{os.path.splitext(os.path.basename(file_path))[0]}.jar"
             output_file_path = os.path.join(output_dir, output_file_name)
-
             with open(output_file_path, 'wb') as output_file:
                 output_file.write(response.content)
             logging.info(f"Файл успешно обработан и сохранен как: {output_file_path}")
-
         # Попробуем удалить оригинальный файл, если это возможно
         try:
             os.remove(file_path)
@@ -67,20 +63,17 @@ def handle_request(file_path, output_dir, output_invalid, output_corrupted, fb, 
                 logging.info(f"Оригинальный файл {file_path} был успешно удален после ожидания.")
             except Exception as e:
                 logging.error(f"Не удалось удалить оригинальный файл {file_path} даже после ожидания: {e}")
-
     except requests.exceptions.RequestException as e:
         handle_error(e, file_path, output_invalid, output_corrupted)
 
 def handle_error(e, file_path, output_invalid, output_corrupted):
     """Обрабатывает ошибки при запросе."""
     error_text = getattr(e.response, 'text', '')
-
     try:
         error_data = json.loads(error_text)
         error_message = error_data.get("error", "")
     except json.JSONDecodeError:
         error_message = error_text
-
     # Проверяем конкретные ошибки и перемещаем файлы в соответствующие директории
     if "архив повреждён" in error_message:
         logging.error(f"Ошибка: {error_message}, файл поврежден: {file_path}")
@@ -91,16 +84,14 @@ def handle_error(e, file_path, output_invalid, output_corrupted):
     else:
         logging.error(f"Неизвестная ошибка обработки: {error_message}")
 
-def process_jar(file_path, output_dir, output_invalid, output_corrupted, fb='yes', cl=3, m='bing', f='en', t='ru'):
+def process_jar(file_path, output_dir, output_invalid, output_corrupted, fb='yes', cl=3, m='bing', f='en', t='ru', translate_method='local'):
     """Обрабатывает JAR файл."""
     if cl < 1:
         raise ValueError("Параметр 'cl' должен быть положительным числом.")
-
     if not os.path.exists(file_path):
         logging.error(f"Ошибка: Файл {file_path} не найден.")
         return
-
-    handle_request(file_path, output_dir, output_invalid, output_corrupted, fb, cl, m, f, t)
+    handle_request(file_path, output_dir, output_invalid, output_corrupted, fb, cl, m, f, t, translate_method)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Перевод JAR файлов.')
@@ -109,19 +100,18 @@ if __name__ == "__main__":
     parser.add_argument('--m', type=str, default='bing', choices=['google', 'google2', 'bing'], help='Выбор переводчика (default: bing).')
     parser.add_argument('--f', type=str, default='en', choices=supported_languages, help='Исходный язык (default: en).')
     parser.add_argument('--t', type=str, default='ru', choices=supported_languages, help='Целевой язык (default: ru).')
+    parser.add_argument('--translateMethod', type=str, default='local', choices=['local', 'ai'], help='Метод перевода (default: local).')
     parser.add_argument('--output_dir', type=str, default='1', help='Директория для переведённых JAR-файлов (default: 1).')
     parser.add_argument('--output_invalid', type=str, default='2', help='Директория для неподходящих JAR-файлов (default: 2).')
     parser.add_argument('--output_corrupted', type=str, default='3', help='Директория для повреждённых JAR-файлов (default: 3).')
-
     args = parser.parse_args()
 
     current_directory = os.getcwd()
     jar_files = [f for f in os.listdir(current_directory) if f.endswith('.jar')]
-
     if not jar_files:
         logging.warning("JAR файлы не найдены в текущей директории.")
     else:
         for jar_file in jar_files:
             logging.info(f"Обработка файла: {jar_file}")
             process_jar(jar_file, args.output_dir, args.output_invalid, args.output_corrupted, 
-                        fb=args.fb, cl=args.cl, m=args.m, f=args.f, t=args.t)
+                        fb=args.fb, cl=args.cl, m=args.m, f=args.f, t=args.t, translate_method=args.translateMethod)
